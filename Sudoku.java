@@ -18,10 +18,11 @@ public class Sudoku{
     public Sudoku(String filename){
         grid = new int[3][3];
         File pFile = new File(filename);
+        BufferedReader bin;
+        Scanner  scan;
         try{
             FileReader fin = new FileReader(pFile);
-            BufferedReader bin = new BufferedReader(fin);
-            Scanner scan;
+            bin = new BufferedReader(fin);
             String currRow = bin.readLine();
             while(currRow!=null){
                 int row = 0;
