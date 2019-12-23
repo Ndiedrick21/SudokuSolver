@@ -50,4 +50,30 @@ public class Sudoku{
         }
     }
 
+    /**
+     * A method for printing the current status of the puzzle
+     */
+    public void printPuzzle(){
+        boolean horizontalRow = true;
+        for(int i = 0; i<grid.length; i++){
+            if(horizontalRow){
+                for(int r = 0; r<19; r++){
+                    System.out.print("_");
+                }
+                i--;
+            }else{
+                for(int j = 0; j<gird[i].length; j++){
+                    System.out.print("|");
+                    if(grid[i][j]==0){
+                        System.out.print("x");
+                    }else{
+                        System.out.print(grid[i][j]);
+                    }
+                }
+                System.out.print("|");
+                horizontalRow = !horizontalRow;
+            }
+        }
+    }
+
 }
