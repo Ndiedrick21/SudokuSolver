@@ -16,19 +16,20 @@ public class Sudoku{
      * @param filename the file that stores the outline of the sudoku puzzle
      */
     public Sudoku(String filename){
-        grid = new int[3][3];
+        grid = new int[9][9];
         File pFile = new File(filename);
+        FileReader fin;
         BufferedReader bin;
         Scanner  scan;
         try{
-            FileReader fin = new FileReader(pFile);
+            fin = new FileReader(pFile);
             bin = new BufferedReader(fin);
             String currRow = bin.readLine();
+            int row = 0;
             while(currRow!=null){
-                int row = 0;
                 scan = new Scanner(currRow);
+                int col = 0;
                 while(scan.hasNext()){
-                    int col = 0;
                     if(scan.hasNextInt()){
                         grid[row][col] = scan.nextInt();
                     }else{
@@ -42,9 +43,10 @@ public class Sudoku{
                 }
                 row++;
                 currRow = bin.readLine();
-                bin.close();
                 scan.close();
             }
+            fin.close();
+            bin.close();
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -58,7 +60,7 @@ public class Sudoku{
         for(int i = 0; i<grid.length; i++){
             if(horizontalRow){
                 for(int r = 0; r<19; r++){
-                    System.out.print("_");
+                    System.out.print("-");
                 }
                 i--;
             }else{
@@ -71,8 +73,9 @@ public class Sudoku{
                     }
                 }
                 System.out.print("|");
-                horizontalRow = !horizontalRow;
             }
+            horizontalRow = !horizontalRow;
+            System.out.println();
         }
     }
 
