@@ -10,6 +10,8 @@ public class Sudoku{
             FileReader fin = new FileReader(pFile);
             BufferedReader bin = new BufferedReader(fin);
             Scanner scan = new Scanner(bin.readLine());
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 }
