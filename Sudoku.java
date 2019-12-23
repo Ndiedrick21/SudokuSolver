@@ -52,6 +52,16 @@ public class Sudoku{
         }
     }
 
+    public int[][] getGrid(){
+        int[][] newGrid = new int[9][9];
+        for(int i = 0; i<grid.length; i++){
+            for(int j = 0; j<grid[i].length; j++){
+                newGrid[i][j] = grid[i][j];
+            }
+        }
+        return newGrid;
+    }
+
     /**
      * A method for printing the current status of the puzzle
      */
@@ -77,6 +87,14 @@ public class Sudoku{
             horizontalRow = !horizontalRow;
             System.out.println();
         }
+    }
+
+    public int getGridValue(int row, int col){
+        return grid[row][col];
+    }
+
+    public setGridValue(int row, int col, int value){
+        grid[row][col] = value;
     }
 
 }
