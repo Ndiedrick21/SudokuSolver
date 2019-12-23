@@ -42,12 +42,11 @@ public class Sudoku{
                 }
                 row++;
                 currRow = bin.readLine();
+                bin.close();
+                scan.close();
             }
         }catch(IOException e){
             e.printStackTrace();
-        }finally{
-            bin.close();
-            scan.close();
         }
     }
 
@@ -63,7 +62,7 @@ public class Sudoku{
                 }
                 i--;
             }else{
-                for(int j = 0; j<gird[i].length; j++){
+                for(int j = 0; j<grid[i].length; j++){
                     System.out.print("|");
                     if(grid[i][j]==0){
                         System.out.print("x");
