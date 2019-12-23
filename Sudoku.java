@@ -52,6 +52,10 @@ public class Sudoku{
         }
     }
 
+    /**
+     * A getter method to return a copy of the puzzle array
+     * @return a copy of the grid
+     */
     public int[][] getGrid(){
         int[][] newGrid = new int[9][9];
         for(int i = 0; i<grid.length; i++){
@@ -89,10 +93,22 @@ public class Sudoku{
         }
     }
 
+    /**
+     * A getter method for a specific value in a grid
+     * @param row row index in grid
+     * @param col column index in grid
+     * @return the value at that row and column
+     */
     public int getGridValue(int row, int col){
         return grid[row][col];
     }
 
+    /**
+     * A setter method for a place in the grid
+     * @param row The row index to set the value
+     * @param col The column index to set the value
+     * @param value The value to set at the specific location
+     */
     public setGridValue(int row, int col, int value){
         grid[row][col] = value;
     }
