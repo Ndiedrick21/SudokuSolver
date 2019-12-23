@@ -1,9 +1,20 @@
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * A class for a Sudoku puzzle.
+ * Stores the puzzle as a 3x3 integer array.
+ *      Unknown values are stored as 0.
+ * Author: Nathan Diedrick
+ */
 public class Sudoku{
     private int[][] grid;
 
+    /**
+     * A constructor for a Sudoku puzzle.
+     *      The file should have nine rows, with numbers or x's as values in each row.
+     * @param filename the file that stores the outline of the sudoku puzzle
+     */
     public Sudoku(String filename){
         grid = new int[3][3];
         File pFile = new File(filename);
