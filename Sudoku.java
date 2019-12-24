@@ -47,8 +47,8 @@ public class Sudoku{
                 currRow = bin.readLine();
                 scan.close();
             }
-            fin.close();
             bin.close();
+            fin.close();
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -1,3 +1,4 @@
+import java.util.Optional;
 
 /**
  * A class that solves a sudoku puzzle
@@ -9,6 +10,9 @@ public class SudokuSolver{
     private int[][] sectionConstraints; //The value at each index is the number of assigned values in that section.
     public SudokuSolver(Sudoku s){
         puzzle = s;
+        columnConstraints = new int[9];
+        rowConstraints = new int[9];
+        sectionConstraints = new int[3][3];
     }
 
     /**
@@ -18,10 +22,11 @@ public class SudokuSolver{
      */
     public Optional<Sudoku> solve(){
         backtrack(puzzle);
+        return null;
     }
 
-    private boolean backtrack(Sudoku s){
+    private Sudoku backtrack(Sudoku s){
 
-        return false;
+        return null;
     }
 }
