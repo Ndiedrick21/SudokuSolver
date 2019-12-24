@@ -9,6 +9,7 @@ import java.util.Scanner;
  */
 public class Sudoku{
     private int[][] grid;
+    private boolean solved;
 
     /**
      * A constructor for a Sudoku puzzle.
@@ -17,6 +18,7 @@ public class Sudoku{
      */
     public Sudoku(String filename){
         grid = new int[9][9];
+        solved = false;
         File pFile = new File(filename);
         FileReader fin;
         BufferedReader bin;
@@ -109,8 +111,24 @@ public class Sudoku{
      * @param col The column index to set the value
      * @param value The value to set at the specific location
      */
-    public setGridValue(int row, int col, int value){
+    public void setGridValue(int row, int col, int value){
         grid[row][col] = value;
+    }
+
+    /**
+     * A setter method for if the puzzle is solved.
+     * @param val The value to set solved to.
+     */
+    public void setSolved(boolean val){
+        solved = val;
+    }
+
+    /**
+     * A getter for if the puzzle is solved.
+     * @return true, if the puzzle is solved, else false
+     */
+    public boolean getSolved(){
+        return solved;
     }
 
 }
