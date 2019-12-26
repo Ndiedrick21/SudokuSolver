@@ -13,6 +13,23 @@ public class SudokuSolver{
         columnConstraints = new int[9];
         rowConstraints = new int[9];
         sectionConstraints = new int[3][3];
+        setupConstraints();
+    }
+
+    /**
+     * A private helper method that setups the counts for constraints for row, columns, and sections.
+     */
+    private void setupConstraints(){
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                int currVal = puzzle.getGridValue(i, j);
+                if(currVal!=0){
+                    rowConstraints[i]++;
+                    columnConstraints[j]++;
+                    sectionConstraints[i%3][j%3]++;
+                }
+            }
+        }
     }
 
     /**
