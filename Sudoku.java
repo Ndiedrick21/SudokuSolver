@@ -114,6 +114,10 @@ public class Sudoku{
      * @return true if the value can be assigned, false if a constraint is violated
      */
     public boolean setGridValue(int row, int col, int value){
+        if(value ==0 ){
+            grid[row][col] = value;
+            return true;
+        }
         for(int i = 0; i<9; i++){
             if(i!=row&&grid[i][col]==value){
                 return false;

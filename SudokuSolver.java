@@ -8,16 +8,13 @@ public class SudokuSolver{
     private int[] columnConstraints; //The value at each index is the number of assigned values in that column.
     private int[] rowConstraints; //The value at each index is the number of assigned values in that row.
     private int[][] sectionConstraints; //The value at each index is the number of assigned values in that section.
-    private HashMap<Integer, List<Integer>> assignedLocations;
+    private HashSet<Slot> unassignedVariables;
     public SudokuSolver(Sudoku s){
         puzzle = s;
         columnConstraints = new int[9];
         rowConstraints = new int[9];
         sectionConstraints = new int[3][3];
-        assignedLocations = new HashMap<>();
-        for(int i = 0; i<9; i++){
-            assignedLocations.put(i, new LinkedList<Integer>());
-        }
+        unassignedVariables = new HashSet<>();
         setupConstraints();
     }
 
@@ -32,34 +29,29 @@ public class SudokuSolver{
                     rowConstraints[i]++;
                     columnConstraints[j]++;
                     sectionConstraints[i%3][j%3]++;
-                    assignedLocations.get(i).add(j);
+                }else{
+                    System.out.println("Found unassigned");
+                    unassignedVariables.add(new Slot(i, j));
                 }
             }
         }
     }
 
     //Returns the slot of the most constraining variable
-    private Slot getNextSlot(Sudoku s){
-        int bestRow = -1;
-        int bestCol = -1;
+    private Slot getNextSlot(){
+        Slot bestSlot = null;
         int bestVal = 0;
-        for(int i = 0; i<9; i++){
-            for(int j = 0; j<9; j++){
-                if(s.getGridValue(i, j)==0){
-                    int currVal = 0;
-                    currVal+=rowConstraints[i];
-                    currVal+=columnConstraints[j];
-                    currVal+=sectionConstraints[i%3][j%3];
-                    if(currVal>=bestVal){
-                        bestRow = i;
-                        bestCol = j;
-                        bestVal = currVal;
-                    }
-                }
+        for(Slot slot:unassignedVariables){
+            int currVal = 0;
+            currVal+=rowConstraints[slot.row];
+            currVal+=columnConstraints[slot.column];
+            currVal+=sectionConstraints[slot.row%3][slot.column%3];
+            if(currVal>=bestVal){
+                bestSlot = slot;
+                bestVal = currVal;
             }
         }
-        System.out.println("Found slot: row="+bestRow+"| col="+bestCol);
-        return new Slot(bestRow, bestCol);
+        return bestSlot;
     }
 
     /**
@@ -73,30 +65,42 @@ public class SudokuSolver{
 
     private Sudoku backtrack(Sudoku s){
 
-        Slot nextSlot = getNextSlot(s);
-        if(nextSlot.row==-1&&nextSlot.column==-1){
+        Slot nextSlot = getNextSlot();
+        unassignedVariables.remove(nextSlot);
+        System.out.println(nextSlot);
+        if(nextSlot==null){
             s.setSolved(true);
             return s;
         }
         for(int i = 1; i<=9;i++){
-            if(assignValue(nextSlot.row, nextSlot.column, i, s)){
+            if(assignValue(nextSlot, i, s)){
                 backtrack(s);
                 if(s.getSolved()){
                     return s;
                 }
+                unassignValue(nextSlot, s);
             }
         }
+        unassignedVariables.add(nextSlot);
         return s;
     }
 
-    private boolean assignValue(int row, int col, int value, Sudoku s){
-        boolean assignment = s.setGridValue(row, col, value);
+    private boolean assignValue(Slot slot, int value, Sudoku s){
+        boolean assignment = s.setGridValue(slot.row, slot.column, value);
         if(assignment){
-            rowConstraints[row]++;
-            columnConstraints[col]++;
-            sectionConstraints[row%3][col%3]++;
+            rowConstraints[slot.row]++;
+            columnConstraints[slot.column]++;
+            sectionConstraints[slot.row%3][slot.column%3]++;
+            return true;
         }
-        return assignment;
+        return false;
+    }
+
+    private void unassignValue(Slot slot, Sudoku s){
+        rowConstraints[slot.row]--;
+        columnConstraints[slot.column]--;
+        sectionConstraints[slot.row%3][slot.column%3]--;
+        s.setGridValue(slot.row, slot.column, 0);
     }
 
     class Slot{
@@ -106,6 +110,10 @@ public class SudokuSolver{
         public Slot(int r, int c){
             row = r;
             column = c;
+        }
+
+        public String toString(){
+            return "Slot-> row: "+row+" | col: "+column;
         }
     }
 }
