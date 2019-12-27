@@ -110,9 +110,28 @@ public class Sudoku{
      * @param row The row index to set the value
      * @param col The column index to set the value
      * @param value The value to set at the specific location
+     * @return true if the value can be assigned, false if a constraint is violated
      */
-    public void setGridValue(int row, int col, int value){
+    public boolean setGridValue(int row, int col, int value){
+        for(int i = 0; i<9; i++){
+            if(i!=row&&grid[i][col]==value){
+                return false;
+            }
+        }
+        for(int j = 0; j<9; j++){
+            if(j!=col&&grid[row][j]==value){
+                return false;
+            }
+        }
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                if(i!=row&&j!=col&&grid[i][j]==value){
+                    return false;
+                }
+            }
+        }
         grid[row][col] = value;
+        return true;
     }
 
     /**

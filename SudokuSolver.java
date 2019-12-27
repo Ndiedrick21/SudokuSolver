@@ -38,7 +38,28 @@ public class SudokuSolver{
         }
     }
 
-
+    //Returns the slot of the most constraining variable
+    private Slot getNextSlot(){
+        int bestRow = -1;
+        int bestCol = -1;
+        int bestVal = -1;
+        for(int i = 0; i<9; i++){
+            for(int j = 0; j<9; j++){
+                if(puzzle.getGridValue(i, j)!=0){
+                    int currVal = 0;
+                    currVal+=rowConstraints[i];
+                    currVal+=columnConstraints[j];
+                    currVal+=sectionConstraints[i%3][j%3];
+                    if(currVal>bestVal){
+                        bestRow = i;
+                        bestCol = j;
+                        bestVal = currVal;
+                    }
+                }
+            }
+        }
+        return new Slot(bestRow, bestCol);
+    }
 
     /**
      * A method for initializing the solving of the sudoku puzzle.
@@ -52,7 +73,15 @@ public class SudokuSolver{
 
     private Sudoku backtrack(Sudoku s){
 
-        return null;
+        Slot nextSlot = getNextSlot();
+        if(nextSlot.row==-1&&nextSlot.column==-1){
+            s.setSolved(true);
+            return s;
+        }
+        for(int i = 1; i<=9;i++){
+            
+        }
+        return s;
     }
 
     class Slot{
