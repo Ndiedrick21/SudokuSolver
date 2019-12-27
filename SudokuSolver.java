@@ -38,6 +38,8 @@ public class SudokuSolver{
         }
     }
 
+
+
     /**
      * A method for initializing the solving of the sudoku puzzle.
      * @return an optional of Sudoku type, if the puzzle was solvable,
@@ -51,5 +53,15 @@ public class SudokuSolver{
     private Sudoku backtrack(Sudoku s){
 
         return null;
+    }
+
+    class Slot{
+        public int row;
+        public int column;
+
+        public Slot(int r, int c){
+            row = r;
+            column = c;
+        }
     }
 }
