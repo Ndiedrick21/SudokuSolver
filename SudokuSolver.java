@@ -30,7 +30,6 @@ public class SudokuSolver{
                     columnConstraints[j]++;
                     sectionConstraints[i%3][j%3]++;
                 }else{
-                    System.out.println("Found unassigned");
                     unassignedVariables.add(new Slot(i, j));
                 }
             }
@@ -67,7 +66,7 @@ public class SudokuSolver{
 
         Slot nextSlot = getNextSlot();
         unassignedVariables.remove(nextSlot);
-        System.out.println(nextSlot);
+        
         if(nextSlot==null){
             s.setSolved(true);
             return s;
