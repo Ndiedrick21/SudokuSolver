@@ -107,6 +107,7 @@ public class Sudoku{
 
     /**
      * A setter method for a place in the grid
+     * Also checks if the value violates any constraints
      * @param row The row index to set the value
      * @param col The column index to set the value
      * @param value The value to set at the specific location
