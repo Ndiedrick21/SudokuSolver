@@ -124,13 +124,14 @@ public class Sudoku{
                 return false;
             }
         }
-        for(int i = 0; i<9; i++){
-            for(int j = 0; j<9; j++){
+        for(int i = 3*(row%3); i<3*(row%3)+3; i++){
+            for(int j = 3*(col%3); j<3*(col%3)+3; j++){
                 if(i!=row&&j!=col&&grid[i][j]==value){
                     return false;
                 }
             }
         }
+        System.out.println("Value asiigned| row: "+row+" | col: "+col);
         grid[row][col] = value;
         return true;
     }

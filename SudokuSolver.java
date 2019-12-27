@@ -39,18 +39,18 @@ public class SudokuSolver{
     }
 
     //Returns the slot of the most constraining variable
-    private Slot getNextSlot(){
+    private Slot getNextSlot(Sudoku s){
         int bestRow = -1;
         int bestCol = -1;
-        int bestVal = -1;
+        int bestVal = 0;
         for(int i = 0; i<9; i++){
             for(int j = 0; j<9; j++){
-                if(puzzle.getGridValue(i, j)!=0){
+                if(s.getGridValue(i, j)==0){
                     int currVal = 0;
                     currVal+=rowConstraints[i];
                     currVal+=columnConstraints[j];
                     currVal+=sectionConstraints[i%3][j%3];
-                    if(currVal>bestVal){
+                    if(currVal>=bestVal){
                         bestRow = i;
                         bestCol = j;
                         bestVal = currVal;
@@ -58,6 +58,7 @@ public class SudokuSolver{
                 }
             }
         }
+        System.out.println("Found slot: row="+bestRow+"| col="+bestCol);
         return new Slot(bestRow, bestCol);
     }
 
@@ -66,22 +67,36 @@ public class SudokuSolver{
      * @return an optional of Sudoku type, if the puzzle was solvable,
      *     then the optional will have a completed Sudoku
      */
-    public Optional<Sudoku> solve(){
-        backtrack(puzzle);
-        return null;
+    public Sudoku solve(){
+        return backtrack(puzzle);
     }
 
     private Sudoku backtrack(Sudoku s){
 
-        Slot nextSlot = getNextSlot();
+        Slot nextSlot = getNextSlot(s);
         if(nextSlot.row==-1&&nextSlot.column==-1){
             s.setSolved(true);
             return s;
         }
         for(int i = 1; i<=9;i++){
-            
+            if(assignValue(nextSlot.row, nextSlot.column, i, s)){
+                backtrack(s);
+                if(s.getSolved()){
+                    return s;
+                }
+            }
         }
         return s;
+    }
+
+    private boolean assignValue(int row, int col, int value, Sudoku s){
+        boolean assignment = s.setGridValue(row, col, value);
+        if(assignment){
+            rowConstraints[row]++;
+            columnConstraints[col]++;
+            sectionConstraints[row%3][col%3]++;
+        }
+        return assignment;
     }
 
     class Slot{
