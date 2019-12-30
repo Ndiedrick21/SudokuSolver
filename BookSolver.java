@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 public class BookSolver {
-    static int MAX_PAGE_NUMBER = 55;
+    static int MAX_PAGE_NUMBER = 70;
     public static void main(String[] args){
         LinkedList<Sudoku> puzzles = new LinkedList<>();
         for(int i = 31; i<=MAX_PAGE_NUMBER; i++){
