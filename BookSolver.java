@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 
 public class BookSolver {
-    static int MAX_PAGE_NUMBER = 105;
+    static int MAX_PAGE_NUMBER = 160;
 
     //Different Sections of the book
     static final int EASY_START = 31;
