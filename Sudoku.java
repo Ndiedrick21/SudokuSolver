@@ -37,6 +37,7 @@ public class Sudoku{
                     }else{
                         String curr = scan.next();
                         if(!curr.equalsIgnoreCase("x")){
+                            scan.close();
                             throw new IOException("Incorrect file format");
                         }
                         grid[row][col] = 0;
