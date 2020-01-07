@@ -84,6 +84,13 @@ public class SudokuSolver{
         return s;
     }
 
+    /**
+     * Assigns a value to a slot then updates the relevant counters for the solver.
+     * @param slot The slot that will have the value set
+     * @param value The value that will be assigned to the slot.
+     * @param s The puzzle to assign the value to
+     * @return returns true if the value was successfully assigned
+     */
     private boolean assignValue(Slot slot, int value, Sudoku s){
         boolean assignment = s.setGridValue(slot.row, slot.column, value);
         if(assignment){
@@ -95,6 +102,11 @@ public class SudokuSolver{
         return false;
     }
 
+    /**
+     * Unassigns a value from a grid spot
+     * @param slot The slot to unassign the value from
+     * @param s The puzzle to unassign the value from
+     */
     private void unassignValue(Slot slot, Sudoku s){
         rowConstraints[slot.row]--;
         columnConstraints[slot.column]--;
@@ -102,6 +114,9 @@ public class SudokuSolver{
         s.setGridValue(slot.row, slot.column, 0);
     }
 
+    /**
+     * A helper class for storing a pair of row and column
+     */
     class Slot{
         public int row;
         public int column;
@@ -113,6 +128,12 @@ public class SudokuSolver{
 
         public String toString(){
             return "Slot-> row: "+row+" | col: "+column;
+        }
+
+        @Override
+        public boolean equals(Object slot){
+            Slot s = (Slot)slot;
+            return row==s.row&&column==s.column;
         }
     }
 }
