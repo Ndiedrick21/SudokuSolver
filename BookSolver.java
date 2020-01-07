@@ -9,10 +9,11 @@ public class BookSolver {
         }
         System.out.println("Done reading files");
         SudokuSolver solver;
+        int counter = 0;
         for(Sudoku s:puzzles){
             solver = new SudokuSolver(s);
             solver.solve();
-            System.out.println(s.getSolved());
+            System.out.println(s.getSolved()+ " - "+ (++counter));
             //s.printPuzzle();
         }
         System.out.println("Solved "+puzzles.size()+" puzzles");
