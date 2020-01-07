@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class Sudoku{
     private int[][] grid;
     private boolean solved;
+    private String name;
 
     /**
      * A constructor for a Sudoku puzzle.
@@ -19,6 +20,7 @@ public class Sudoku{
     public Sudoku(String filename){
         grid = new int[9][9];
         solved = false;
+        name = filename;
         File pFile = new File(filename);
         FileReader fin;
         BufferedReader bin;
@@ -154,6 +156,14 @@ public class Sudoku{
      */
     public boolean getSolved(){
         return solved;
+    }
+
+    /**
+     * A getter method for the name of the puzzle.
+     * @return the name of the puzzle's file
+     */
+    public String getName(){
+        return name;
     }
 
 }
