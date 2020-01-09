@@ -73,10 +73,15 @@ public class SudokuSolver{
         }
         for(int i = 1; i<=9;i++){
             if(assignValue(nextSlot, i, s)){
-                backtrack(s);
-                if(s.getSolved()){
-                    return s;
+                //Add inferences
+                Inference inf = findInferences(s, nextSlot);
+                if(!inf.conflictFound){
+                    backtrack(s);
+                    if(s.getSolved()){
+                        return s;
+                    }
                 }
+                undoInferences(s, inf);
                 unassignValue(nextSlot, s);
             }
         }
@@ -114,6 +119,130 @@ public class SudokuSolver{
         s.setGridValue(slot.row, slot.column, 0);
     }
 
+    private Inference findInferences(Sudoku s, Slot currSlot){
+        Inference newInference = new Inference();
+        if(rowConstraints[currSlot.row]==8){
+            Slot rowInf = assignRowInference(s, currSlot.row);
+            if(rowInf==null){
+                newInference.foundConflict();
+                return newInference;
+            }else{
+                newInference.addAssignedSlot(rowInf);
+            }
+        }
+        if(columnConstraints[currSlot.column]==8){
+            Slot colInf = assignColInference(s, currSlot.column);
+            if(colInf==null){
+                newInference.foundConflict();
+                return newInference;
+            }else{
+                newInference.addAssignedSlot(colInf);
+            }
+        }
+        if(sectionConstraints[currSlot.row/3][currSlot.column/3]==8){
+            Slot secInf = assignSectionInference(s, currSlot);
+            if(secInf==null){
+                newInference.foundConflict();
+                return newInference;
+            }else{
+                newInference.addAssignedSlot(secInf);
+            }
+        }
+        return newInference;
+    }
+
+    /**
+     * If a row if found with 8 assignments, we can infer the last value.
+     *      This process is done by finding the open slot and computing the remining value.
+     * @param s The puzzle to find the inference
+     * @param row The row that caused the inference to be available
+     * @return the slot that recieved the assignment from the inference, null if the value cant be assigned.
+     */
+    private Slot assignRowInference(Sudoku s, int row){
+        int valueToAssign = Sudoku.SECTION_TOTAL;
+        int colToAssign = 0;
+        for(int i = 0; i<9; i++){
+            int currVal = s.getGridValue(row, i);
+            if(currVal == 0){
+                colToAssign = i;
+            }
+            valueToAssign-=currVal;
+        }
+        Slot assignSlot = new Slot(row, colToAssign);
+        boolean validAssignment = assignValue(assignSlot, valueToAssign, s);
+        if(validAssignment){
+            unassignedVariables.remove(assignSlot);
+            return assignSlot;
+        }else{return null;}
+    }
+
+    /**
+     * If a column if found with 8 assignments, we can infer the last value.
+     *      This process is done by finding the open slot and computing the remining value.
+     * @param s The puzzle to find the inference
+     * @param col The col that caused the inference to be available
+     * @return the slot that recieved the assignment from the inference, null if the value cant be assigned.
+     */
+    private Slot assignColInference(Sudoku s, int col){
+        int valueToAssign = Sudoku.SECTION_TOTAL;
+        int rowToAssign = 0;
+        for(int i = 0; i<9; i++){
+            int currVal = s.getGridValue(i, col);
+            if(currVal == 0){
+                rowToAssign = i;
+            }
+            valueToAssign-=currVal;
+        }
+        Slot assignSlot = new Slot(rowToAssign, col);
+        boolean validAssignment = assignValue(assignSlot, valueToAssign, s);
+        if(validAssignment){
+            unassignedVariables.remove(assignSlot);
+            return assignSlot;
+        }else{return null;}
+    }
+
+    /**
+     * If a section if found with 8 assignments, we can infer the last value.
+     *      This process is done by finding the open slot and computing the remining value.
+     * @param s The puzzle to find the inference
+     * @param slot The slot that caused the inference to be available
+     * @return the slot that recieved the assignment from the inference, null if the value cant be assigned.
+     */
+    private Slot assignSectionInference(Sudoku s, Slot slot){
+        int valueToAssign = Sudoku.SECTION_TOTAL;
+        int rowToAssign = 0;
+        int colToAssign = 0;
+        for(int i = (slot.row/3)*3; i<(slot.row/3)*3+3; i++){
+            for(int j = (slot.column/3)*3; j<(slot.column/3)*3+3; j++){
+                int currVal = s.getGridValue(i, j);
+                if(currVal == 0){
+                    rowToAssign = i;
+                    colToAssign = j;
+                }
+                valueToAssign-=currVal;
+            }
+        }
+        Slot assignSlot = new Slot(rowToAssign, colToAssign);
+        boolean validAssignment = assignValue(assignSlot, valueToAssign, s);
+        if(validAssignment){
+            unassignedVariables.remove(assignSlot);
+            return assignSlot;
+        }else{return null;}
+    }
+
+    /**
+     * Will unassign values made in this inferece object
+     *      These slots will be added back to the unassigned variables list.
+     * @param s The puzzle to unassign values from
+     * @param inf The inferene object to be undone
+     */
+    private void undoInferences(Sudoku s, Inference inf){
+        for(Slot slot:inf.assignedSlots){
+            unassignValue(slot, s);
+            unassignedVariables.add(slot);
+        }
+    }
+
     /**
      * A helper class for storing a pair of row and column
      */
@@ -134,6 +263,32 @@ public class SudokuSolver{
         public boolean equals(Object slot){
             Slot s = (Slot)slot;
             return row==s.row&&column==s.column;
+        }
+
+        @Override
+        public int hashCode(){
+            int hash = 0;
+            hash+=row+column;
+            hash*=row*column;
+            return hash;
+        }
+    }
+
+    class Inference{
+        public boolean conflictFound;
+        public List<Slot> assignedSlots;
+
+        public Inference(){
+            conflictFound = false;
+            assignedSlots = new LinkedList<>();
+        }
+
+        public void foundConflict(){
+            conflictFound = true;
+        }
+
+        public void addAssignedSlot(Slot slot){
+            assignedSlots.add(slot);
         }
     }
 }

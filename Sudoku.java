@@ -11,6 +11,7 @@ public class Sudoku{
     private int[][] grid;
     private boolean solved;
     private String name;
+    public static final int SECTION_TOTAL = 45;
 
     /**
      * A constructor for a Sudoku puzzle.
