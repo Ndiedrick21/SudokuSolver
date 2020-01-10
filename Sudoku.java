@@ -97,6 +97,7 @@ public class Sudoku{
             horizontalRow = !horizontalRow;
             System.out.println();
         }
+        System.out.println("-------------------");
     }
 
     /**
