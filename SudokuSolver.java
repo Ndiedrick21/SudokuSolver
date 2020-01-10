@@ -28,7 +28,7 @@ public class SudokuSolver{
                 if(currVal!=0){
                     rowConstraints[i]++;
                     columnConstraints[j]++;
-                    sectionConstraints[i%3][j%3]++;
+                    sectionConstraints[i/3][j/3]++;
                 }else{
                     unassignedVariables.add(new Slot(i, j));
                 }
@@ -44,7 +44,7 @@ public class SudokuSolver{
             int currVal = 0;
             currVal+=rowConstraints[slot.row];
             currVal+=columnConstraints[slot.column];
-            currVal+=sectionConstraints[slot.row%3][slot.column%3];
+            currVal+=sectionConstraints[slot.row/3][slot.column/3];
             if(currVal>=bestVal){
                 bestSlot = slot;
                 bestVal = currVal;
@@ -96,7 +96,7 @@ public class SudokuSolver{
         if(assignment){
             rowConstraints[slot.row]++;
             columnConstraints[slot.column]++;
-            sectionConstraints[slot.row%3][slot.column%3]++;
+            sectionConstraints[slot.row/3][slot.column/3]++;
             return true;
         }
         return false;
@@ -110,7 +110,7 @@ public class SudokuSolver{
     private void unassignValue(Slot slot, Sudoku s){
         rowConstraints[slot.row]--;
         columnConstraints[slot.column]--;
-        sectionConstraints[slot.row%3][slot.column%3]--;
+        sectionConstraints[slot.row/3][slot.column/3]--;
         s.setGridValue(slot.row, slot.column, 0);
     }
 
