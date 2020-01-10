@@ -41,6 +41,7 @@ public class BookSolver {
         }
         System.out.println("Done reading files");
         SudokuSolver solver;
+        double startTime = System.currentTimeMillis();
         //Solve selected puzzles
         for(Sudoku s:puzzles){
             solver = new SudokuSolver(s);
@@ -48,6 +49,7 @@ public class BookSolver {
             System.out.println(s.getSolved()+ " - "+ s.getName());
             //s.printPuzzle();
         }
-        System.out.println("Solved "+puzzles.size()+" puzzles");
+        double completionTime = (System.currentTimeMillis()-startTime)/1000;
+        System.out.println("Solved "+puzzles.size()+" puzzles in "+completionTime+" seconds");
     }
 }
