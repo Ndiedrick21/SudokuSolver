@@ -41,15 +41,15 @@ public class BookSolver {
         }
         System.out.println("Done reading files");
         SudokuSolver solver;
-        int failCount = 0;
+        double startTime = System.currentTimeMillis();
         //Solve selected puzzles
         for(Sudoku s:puzzles){
             solver = new SudokuSolver(s);
             solver.solve();
             System.out.println(s.getSolved()+ " - "+ s.getName());
-            if(!s.getSolved())failCount++;
             //s.printPuzzle();
         }
-        System.out.println("Solved "+(puzzles.size()-failCount)+" puzzles");
+        double completionTime = (System.currentTimeMillis()-startTime)/1000;
+        System.out.println("Solved "+puzzles.size()+" puzzles in "+completionTime+" seconds");
     }
 }
