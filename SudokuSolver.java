@@ -28,7 +28,7 @@ public class SudokuSolver{
                 if(currVal!=0){
                     rowConstraints[i]++;
                     columnConstraints[j]++;
-                    sectionConstraints[i%3][j%3]++;
+                    sectionConstraints[i/3][j/3]++;
                 }else{
                     unassignedVariables.add(new Slot(i, j));
                 }
@@ -44,7 +44,7 @@ public class SudokuSolver{
             int currVal = 0;
             currVal+=rowConstraints[slot.row];
             currVal+=columnConstraints[slot.column];
-            currVal+=sectionConstraints[slot.row%3][slot.column%3];
+            currVal+=sectionConstraints[slot.row/3][slot.column/3];
             if(currVal>=bestVal){
                 bestSlot = slot;
                 bestVal = currVal;
@@ -74,14 +74,14 @@ public class SudokuSolver{
         for(int i = 1; i<=9;i++){
             if(assignValue(nextSlot, i, s)){
                 //Add inferences
-                //Inference inf = findInferences(s, nextSlot);
-                //if(!inf.conflictFound){
+                Inference inf = findInferences(s, nextSlot);
+                if(!inf.conflictFound){
                     backtrack(s);
                     if(s.getSolved()){
                         return s;
                     }
-                //}
-               // undoInferences(s, inf);
+                }
+                undoInferences(s, inf);
                 unassignValue(nextSlot, s);
             }
         }
@@ -121,41 +121,41 @@ public class SudokuSolver{
 
     private Inference findInferences(Sudoku s, Slot currSlot){
         Inference newInference = new Inference();
-        System.out.println("Start of inference");
+        //System.out.println("Start of inference");
         if(rowConstraints[currSlot.row]==8){
-            s.printPuzzle();
+            //s.printPuzzle();
             Slot rowInf = assignRowInference(s, currSlot.row);
             if(rowInf==null){
-                System.out.println("constrsint failed...");
+                //System.out.println("constrsint failed...");
                 newInference.foundConflict();
                 return newInference;
             }else{
                 newInference.addAssignedSlot(rowInf);
-                s.printPuzzle();
+                //s.printPuzzle();
             }
         }
         if(columnConstraints[currSlot.column]==8){
-            s.printPuzzle();
+            //s.printPuzzle();
             Slot colInf = assignColInference(s, currSlot.column);
             if(colInf==null){
-                System.out.println("constrsint failed...");
+                //System.out.println("constrsint failed...");
                 newInference.foundConflict();
                 return newInference;
             }else{
                 newInference.addAssignedSlot(colInf);
-                s.printPuzzle();
+                //s.printPuzzle();
             }
         }
         if(sectionConstraints[currSlot.row/3][currSlot.column/3]==8){
-            s.printPuzzle();
+            //s.printPuzzle();
             Slot secInf = assignSectionInference(s, currSlot);
             if(secInf==null){
-                System.out.println("constrsint failed...");
+                //System.out.println("constrsint failed...");
                 newInference.foundConflict();
                 return newInference;
             }else{
                 newInference.addAssignedSlot(secInf);
-                s.printPuzzle();
+                //s.printPuzzle();
             }
         }
         return newInference;
