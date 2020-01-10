@@ -41,13 +41,15 @@ public class BookSolver {
         }
         System.out.println("Done reading files");
         SudokuSolver solver;
+        int failCount = 0;
         //Solve selected puzzles
         for(Sudoku s:puzzles){
             solver = new SudokuSolver(s);
             solver.solve();
             System.out.println(s.getSolved()+ " - "+ s.getName());
+            if(!s.getSolved())failCount++;
             //s.printPuzzle();
         }
-        System.out.println("Solved "+puzzles.size()+" puzzles");
+        System.out.println("Solved "+(puzzles.size()-failCount)+" puzzles");
     }
 }
